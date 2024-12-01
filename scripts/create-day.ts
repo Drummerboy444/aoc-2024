@@ -6,9 +6,7 @@ if (day === undefined) {
 }
 
 const runFileContents =
-  `import { readLines } from "../../utils/file-reading.ts";
-
-const lines = await readLines("days/${day}/input.test.txt");
+  `const lines = Deno.readTextFileSync("days/${day}/input.test.txt").split("\n")
 
 console.log(lines);
 `;

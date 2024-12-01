@@ -7,9 +7,4 @@ if (day === undefined) {
 
 const runDayFileName = `../days/${day}/run.ts`;
 
-try {
-  await import(runDayFileName);
-} catch {
-  console.log("Day does not exist");
-  Deno.exit();
-}
+await import(runDayFileName);
