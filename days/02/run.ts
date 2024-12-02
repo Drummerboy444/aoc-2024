@@ -4,22 +4,15 @@ const reports = lines.map((line) =>
   line.split(" ").map((s) => Number.parseInt(s))
 );
 
-const getReportDifferences = (report: number[]) => {
-  const differences: number[] = [];
-
-  for (let i = 0; i < report.length - 1; i++) {
-    const thisLevel = report[i];
+const getReportDifferences = (report: number[]): number[] =>
+  report.reduce<number[]>((differences, thisLevel, i) => {
     const nextLevel = report[i + 1];
+    return nextLevel === undefined
+      ? differences
+      : [...differences, nextLevel - thisLevel];
+  }, []);
 
-    if (thisLevel === undefined || nextLevel === undefined) throw new Error();
-
-    differences.push(nextLevel - thisLevel);
-  }
-
-  return differences;
-};
-
-const isReportSafe = (report: number[]) => {
+const isReportSafe = (report: number[]): boolean => {
   const differences = getReportDifferences(report);
   const isSafelyIncreasing = differences.every((d) => d >= 1 && d <= 3);
   const isSafelyDecreasing = differences.every((d) => d >= -3 && d <= -1);
@@ -29,24 +22,12 @@ const isReportSafe = (report: number[]) => {
 const part1 = reports.filter(isReportSafe).length;
 console.log("Part 1:", part1);
 
-const applyDampener = (report: number[], levelToRemove: number) => {
-  const reportAfterDampener: number[] = [];
-  report.forEach((level, i) => {
-    if (i !== levelToRemove) reportAfterDampener.push(level);
-  });
-  return reportAfterDampener;
-};
+const applyDampener = (report: number[], levelToRemove: number): number[] =>
+  report.filter((_, i) => i !== levelToRemove);
 
-const isReportSafeWithDampener = (report: number[]) => {
-  if (isReportSafe(report)) return true;
-
-  for (let i = 0; i < report.length; i++) {
-    const reportWithDampener = applyDampener(report, i);
-    if (isReportSafe(reportWithDampener)) return true;
-  }
-
-  return false;
-};
+const isReportSafeWithDampener = (report: number[]): boolean =>
+  isReportSafe(report) ||
+  report.some((_, i) => isReportSafe(applyDampener(report, i)));
 
 const part2 = reports.filter(isReportSafeWithDampener).length;
 console.log("Part 2:", part2);
