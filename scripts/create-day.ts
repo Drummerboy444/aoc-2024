@@ -6,7 +6,7 @@ if (day === undefined) {
 }
 
 const runFileContents =
-  `const lines = Deno.readTextFileSync("days/${day}/input.test.txt").split("\\n")
+  `const lines = Deno.readTextFileSync("days/${day}/input.test.txt").split("\\n");
 
 console.log(lines);
 `;
